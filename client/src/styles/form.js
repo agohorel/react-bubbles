@@ -37,8 +37,8 @@ export const Form = styled.form`
 
     :hover {
       cursor: pointer;
-      background-color: #2c2c2c;
-      color: #eee;
+      background-color: #6c6c6c;
+      color: #111;
     }
   }
 

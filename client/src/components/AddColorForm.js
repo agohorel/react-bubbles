@@ -51,8 +51,11 @@ export const AddColorForm = ({ updateColors }) => {
 };
 
 const AddForm = styled(Form)`
-  width: 100%;
-  margin: 2rem 0;
+  width: calc(300px - 4rem);
+  margin: 0 auto;
+  position: absolute;
+  bottom: 2rem;
+  left: 2rem;
 
   legend {
     padding: 0;

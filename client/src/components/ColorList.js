@@ -7,7 +7,6 @@ const initialColor = {
 };
 
 const ColorList = ({ colors, updateColors }) => {
-  console.log(colors);
   const [editing, setEditing] = useState(false);
   const [colorToEdit, setColorToEdit] = useState(initialColor);
 
@@ -16,11 +15,17 @@ const ColorList = ({ colors, updateColors }) => {
     setColorToEdit(color);
   };
 
-  const saveEdit = e => {
+  const saveEdit = async (e, id) => {
     e.preventDefault();
-    // Make a put request to save your updated color
-    // think about where will you get the id from...
-    // where is is saved right now?
+    try {
+      const res = await axiosWithAuth().put(`colors/${id}`, colorToEdit);
+      const updatedColors = colors.filter(color => color.id !== id);
+      updatedColors.push(res.data);
+      updateColors(updatedColors);
+      setEditing(false);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const deleteColor = async color => {
@@ -83,7 +88,9 @@ const ColorList = ({ colors, updateColors }) => {
             />
           </label>
           <div className="button-row">
-            <button type="submit">save</button>
+            <button type="submit" onClick={e => saveEdit(e, colorToEdit.id)}>
+              save
+            </button>
             <button onClick={() => setEditing(false)}>cancel</button>
           </div>
         </form>

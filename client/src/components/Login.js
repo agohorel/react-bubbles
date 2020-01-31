@@ -5,6 +5,10 @@ import { Form } from "../styles/form";
 const Login = ({ history }) => {
   const [formData, setFormData] = useState({ username: "", password: "" });
 
+  if (localStorage.getItem("token")) {
+    history.push("/bubbles");
+  }
+
   const handleChange = e => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };

@@ -4,6 +4,7 @@ import { Svg, Rect } from "@potion/element";
 
 const Bubbles = ({ colors }) => {
   const [bubbleData, setBubbleData] = useState([]);
+
   useEffect(() => {
     const generateBubbleData = colors.map((_, i) => ({
       value: Math.floor(Math.random() * (colors.length * 2)) + 1,
@@ -14,7 +15,7 @@ const Bubbles = ({ colors }) => {
 
   return (
     <div className="bubble-wrap">
-      <Svg width={400} height={400}>
+      <Svg width={800} height={800}>
         <Partition
           data={{ children: bubbleData }}
           sum={datum => datum.value}
@@ -23,15 +24,16 @@ const Bubbles = ({ colors }) => {
           animate
         >
           {nodes =>
-            nodes.map(({ key, x0, y0, x1, y1 }, i) => {
+            nodes.map(({ x0, y0, x1, y1 }, i) => {
               if (i < colors.length) {
                 return (
                   <Rect
-                    key={key}
+                    key={i}
                     x={x0}
                     y={y0}
                     width={x1 - x0}
                     height={y1 - y0}
+                    transform={{ scale: [2.25, 2.25] }}
                     fill={colors[i].code.hex}
                   />
                 );
@@ -46,6 +48,3 @@ const Bubbles = ({ colors }) => {
 };
 
 export default Bubbles;
-
-{
-}

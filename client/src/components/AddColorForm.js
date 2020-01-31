@@ -1,5 +1,8 @@
 import React, { useState } from "react";
+import styled from "styled-components";
+
 import { axiosWithAuth } from "../utils/axiosWithAuth";
+import { Form } from "../styles/form";
 
 export const AddColorForm = ({ updateColors }) => {
   const [formData, setFormData] = useState({ name: "", hex: "" });
@@ -26,7 +29,8 @@ export const AddColorForm = ({ updateColors }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <AddForm onSubmit={handleSubmit}>
+      <legend>add color</legend>
       <label htmlFor="name">color name</label>
       <input
         type="text"
@@ -42,6 +46,19 @@ export const AddColorForm = ({ updateColors }) => {
         value={formData.hex}
       />
       <button>add color</button>
-    </form>
+    </AddForm>
   );
 };
+
+const AddForm = styled(Form)`
+  width: 100%;
+  margin: 2rem 0;
+
+  legend {
+    padding: 0;
+  }
+
+  input {
+    width: 100%;
+  }
+`;

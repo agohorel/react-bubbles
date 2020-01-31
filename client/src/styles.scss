@@ -1,5 +1,3 @@
-@import url("https://fonts.googleapis.com/css?family=Montserrat&display=swap");
-
 html,
 body,
 #root,
@@ -11,7 +9,6 @@ body,
 }
 
 .App {
-  font-family: "Montserrat", sans-serif;
   text-align: center;
   display: flex;
 
@@ -25,7 +22,7 @@ body,
 }
 
 .bubble-wrap {
-  margin: 0 auto;
+  margin: 17rem auto;
   display: flex;
   flex-direction: column;
 }
@@ -33,6 +30,8 @@ body,
 .colors-wrap {
   height: 100%;
   width: 300px;
+  color: #eee;
+  padding: 1rem;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 
   ul {
@@ -56,8 +55,6 @@ body,
 .color-box {
   height: 16px;
   width: 16px;
-  border: 1px lightgray solid;
-  margin-right: 36px;
 }
 
 form {

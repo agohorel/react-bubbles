@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { Form } from "../styles/form";
 
 const Login = ({ history }) => {
   const [formData, setFormData] = useState({ username: "", password: "" });
@@ -21,7 +22,7 @@ const Login = ({ history }) => {
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit}>
         <label htmlFor="username">username</label>
         <input
           type="text"
@@ -29,7 +30,7 @@ const Login = ({ history }) => {
           onChange={handleChange}
           value={formData.username}
         />
-        <label htmlFor="password"></label>
+        <label htmlFor="password">password</label>
         <input
           type="password"
           id="password"
@@ -37,7 +38,7 @@ const Login = ({ history }) => {
           value={formData.password}
         />
         <button>log in</button>
-      </form>
+      </Form>
     </>
   );
 };

@@ -1,5 +1,9 @@
 import React, { useState } from "react";
-import axios from "axios";
+import styled from "styled-components";
+
+import { axiosWithAuth } from "../utils/axiosWithAuth";
+import { AddColorForm } from "./AddColorForm";
+import { Form } from "../styles/form";
 
 const initialColor = {
   color: "",
@@ -7,7 +11,6 @@ const initialColor = {
 };
 
 const ColorList = ({ colors, updateColors }) => {
-  console.log(colors);
   const [editing, setEditing] = useState(false);
   const [colorToEdit, setColorToEdit] = useState(initialColor);
 
@@ -16,15 +19,27 @@ const ColorList = ({ colors, updateColors }) => {
     setColorToEdit(color);
   };
 
-  const saveEdit = e => {
+  const saveEdit = async (e, id) => {
     e.preventDefault();
-    // Make a put request to save your updated color
-    // think about where will you get the id from...
-    // where is is saved right now?
+    try {
+      const res = await axiosWithAuth().put(`colors/${id}`, colorToEdit);
+      const updatedColors = colors.filter(color => color.id !== id);
+      updatedColors.push(res.data);
+      updateColors(updatedColors);
+      setEditing(false);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
-  const deleteColor = color => {
-    // make a delete request to delete this color
+  const deleteColor = async color => {
+    try {
+      const res = await axiosWithAuth().delete(`colors/${color.id}`);
+      const updatedColors = colors.filter(color => color.id !== res.data);
+      updateColors(updatedColors);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
@@ -34,12 +49,14 @@ const ColorList = ({ colors, updateColors }) => {
         {colors.map(color => (
           <li key={color.color} onClick={() => editColor(color)}>
             <span>
-              <span className="delete" onClick={e => {
-                    e.stopPropagation();
-                    deleteColor(color)
-                  }
-                }>
-                  x
+              <span
+                className="delete"
+                onClick={e => {
+                  e.stopPropagation();
+                  deleteColor(color);
+                }}
+              >
+                x
               </span>{" "}
               {color.color}
             </span>
@@ -51,39 +68,54 @@ const ColorList = ({ colors, updateColors }) => {
         ))}
       </ul>
       {editing && (
-        <form onSubmit={saveEdit}>
+        <EditForm onSubmit={saveEdit}>
           <legend>edit color</legend>
-          <label>
-            color name:
-            <input
-              onChange={e =>
-                setColorToEdit({ ...colorToEdit, color: e.target.value })
-              }
-              value={colorToEdit.color}
-            />
-          </label>
-          <label>
-            hex code:
-            <input
-              onChange={e =>
-                setColorToEdit({
-                  ...colorToEdit,
-                  code: { hex: e.target.value }
-                })
-              }
-              value={colorToEdit.code.hex}
-            />
-          </label>
+          <label htmlFor="name">color name:</label>
+          <input
+            id="name"
+            onChange={e =>
+              setColorToEdit({ ...colorToEdit, color: e.target.value })
+            }
+            value={colorToEdit.color}
+          />
+          <label htmlFor="hex">hex code:</label>
+          <input
+            id="hex"
+            onChange={e =>
+              setColorToEdit({
+                ...colorToEdit,
+                code: { hex: e.target.value }
+              })
+            }
+            value={colorToEdit.code.hex}
+          />
           <div className="button-row">
-            <button type="submit">save</button>
+            <button type="submit" onClick={e => saveEdit(e, colorToEdit.id)}>
+              save
+            </button>
             <button onClick={() => setEditing(false)}>cancel</button>
           </div>
-        </form>
+        </EditForm>
       )}
-      <div className="spacer" />
-      {/* stretch - build another form here to add a color */}
+      {!editing && <AddColorForm updateColors={updateColors}></AddColorForm>}
     </div>
   );
 };
 
 export default ColorList;
+
+const EditForm = styled(Form)`
+  width: calc(300px - 4rem);
+  margin: 0 auto;
+  position: absolute;
+  bottom: 2rem;
+  left: 2rem;
+
+  legend {
+    padding: 0;
+  }
+
+  input {
+    width: 100%;
+  }
+`;
